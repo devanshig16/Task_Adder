@@ -3,12 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const addTaskBtn = document.getElementById("addTaskBtn");
     const pendingTasks = document.getElementById("pendingTasks");
     const completedTasks = document.getElementById("completedTasks");
-    const darkModeToggle = document.getElementById("darkModeToggle");
 
-    // Load tasks from local storage
+    // Load tasks from local storage when the page opens
     loadTasks();
 
-    // Add a new task
+    // When the Add Task button is clicked
     addTaskBtn.addEventListener("click", function () {
         const taskText = taskInput.value.trim();
         if (taskText === "") {
@@ -16,18 +15,12 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        addTask(taskText, false);
-        taskInput.value = "";
-        saveTasks();
+        addTask(taskText, false); // Add task to Pending list
+        taskInput.value = ""; // Clear input field
+        saveTasks(); // Save changes
     });
 
-    // Dark Mode Toggle
-    darkModeToggle.addEventListener("click", function () {
-        document.body.classList.toggle("dark-mode");
-        saveTheme();
-    });
-
-    // Add task function
+    // Function to add a new task
     function addTask(text, isCompleted) {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
@@ -63,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Save tasks to local storage
+    // Function to save tasks to local storage
     function saveTasks() {
         const pending = [];
         const completed = [];
@@ -80,18 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("completedTasks", JSON.stringify(completed));
     }
 
-    // Load tasks from local storage
+    // Function to load saved tasks from local storage
     function loadTasks() {
         const pending = JSON.parse(localStorage.getItem("pendingTasks")) || [];
         const completed = JSON.parse(localStorage.getItem("completedTasks")) || [];
 
         pending.forEach(task => addTask(task, false));
         completed.forEach(task => addTask(task, true));
-
-        // Load theme
-        if (localStorage.getItem("darkMode") === "enabled") {
-            document.body.classList.add("dark-mode");
-        }
     }
-    
 });
